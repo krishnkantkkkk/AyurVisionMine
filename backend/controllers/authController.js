@@ -1,0 +1,48 @@
+const userModel = require('../models/userModel')
+const {hashGenerator} = require('../utils/hashGenerator');
+const {tokenGenerator} = require('../utils/tokenGenerator');
+const {verifyPassword} = require('../utils/verifyPassword');
+const jwt = require('jsonwebtoken');
+
+module.exports.userRegister = async (req, res)=>{
+    try{
+        const {name, email, password} = req.body;
+        if(await userModel.findOne({email})) return res.status(400).json({message : "User already exists"});
+        const user = await userModel.create({
+            name, 
+            email,
+            password : await hashGenerator(password)
+        });
+        const token = tokenGenerator({userid : user._id});
+        return res.status(201).json({token, user});
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+module.exports.userLogin = async (req, res)=>{ 
+    try{
+        const {email, password} = req.body;
+        const user = await userModel.findOne({email}).select("+password");
+        if(user){
+           const result = await verifyPassword(password, user.password);
+           if(result) {
+                const token = tokenGenerator({userid : user._id});
+                return res.status(201).json({token , user});
+           }
+           return res.status(401).json({message : "Invalid email or password"});
+        }
+        return res.status(401).json({message : "Invalid email or passowrd"});
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+module.exports.userLogout = (req, res)=>{
+    try{
+        res.clearCookie('token');
+        res.send("Logout successful");
+    }catch(err){
+        console.log(err.message);
+    }
+}
