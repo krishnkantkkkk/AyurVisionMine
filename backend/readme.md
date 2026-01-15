@@ -101,8 +101,64 @@
 - User ID, name, and email are returned without password
 
 ---
+
+### 3. User Logout
+
+**Endpoint:** `GET /users/logout`
+
+**Description:** Logout the current user and clear their authentication token.
+
+**Response (Success - 200):**
+```
+Logout successful
+```
+
 **Notes:**
 - Clears the 'token' cookie from the client
+- No request body required
+
+---
+
+### 4. User Profile
+
+**Endpoint:** `GET /users/profile`
+
+**Description:** Retrieve the authenticated user's profile information. This endpoint is protected and requires a valid JWT token.
+
+**Authentication:** Required (JWT Token)
+- Token must be passed in the `Authorization` header as `Bearer {token}` or in cookies as `token`
+
+**Request Headers:**
+```
+Authorization: Bearer {jwt_token}
+```
+OR
+```
+Cookie: token={jwt_token}
+```
+
+**Response (Success - 200):**
+```json
+{
+  "_id": "user_id",
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+```
+
+**Response (Error - 401):**
+```json
+{
+  "message": "Unauthorized access"
+}
+```
+
+**Notes:**
+- Requires authentication via `isLoggedIn` middleware
+- Returns the authenticated user object
+- No request body required
+- Password is never returned in the response
+- Status code 401 is returned if the token is invalid, expired, or missing
 
 ---
 

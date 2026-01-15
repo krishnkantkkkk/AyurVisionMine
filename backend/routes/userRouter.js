@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {userRegister, userLogout, userLogin} = require('../controllers/authController');
+const {userRegister, userLogout, userLogin, userProfile} = require('../controllers/userController');
+const {isLoggedIn} = require('../middlewares/isLoggedIn');
 
 router.get('/', (req, res)=>{
     res.send("Hey User");
@@ -9,5 +10,6 @@ router.get('/', (req, res)=>{
 router.post('/register', userRegister);
 router.post('/login', userLogin);
 router.get('/logout', userLogout);
+router.get('/profile', isLoggedIn, userProfile);
 
 module.exports = router;

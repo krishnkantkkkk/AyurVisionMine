@@ -46,3 +46,7 @@ module.exports.userLogout = (req, res)=>{
         console.log(err.message);
     }
 }
+
+module.exports.userProfile = (req, res)=>{
+    res.status(200).json(req.user);
+}
