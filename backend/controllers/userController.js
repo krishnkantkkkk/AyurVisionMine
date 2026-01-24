@@ -6,13 +6,15 @@ const jwt = require('jsonwebtoken');
 
 module.exports.userRegister = async (req, res)=>{
     try{
-        const {name, email, password} = req.body;
+        const {firstName, lastName, email, password} = req.body;
         if(await userModel.findOne({email})) return res.status(400).json({message : "User already exists"});
         const user = await userModel.create({
-            name, 
+            firstName,
+            lastName, 
             email,
             password : await hashGenerator(password)
         });
+        user.password = undefined;
         const token = tokenGenerator({userid : user._id});
         return res.status(201).json({token, user});
     }catch(err){
@@ -28,6 +30,7 @@ module.exports.userLogin = async (req, res)=>{
            const result = await verifyPassword(password, user.password);
            if(result) {
                 const token = tokenGenerator({userid : user._id});
+                user.password = undefined
                 return res.status(201).json({token , user});
            }
            return res.status(401).json({message : "Invalid email or password"});
@@ -44,6 +47,16 @@ module.exports.userLogout = (req, res)=>{
         res.send("Logout successful");
     }catch(err){
         console.log(err.message);
+    }
+}
+
+module.exports.userUpdate = async (req, res)=>{
+    try{
+        const {firstName, lastName, email, age} = req.body;
+        const user = await userModel.findOneAndUpdate({_id : req.user._id}, {firstName, lastName, email, age}, {new : true});
+        res.status(200).json(user);
+    }catch(err){
+        console.log(err);
     }
 }
 

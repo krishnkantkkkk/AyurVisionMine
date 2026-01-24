@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+input {
+    outline: none;
+}
+
+.clip-custom {
+    clip-path: path();
+}
