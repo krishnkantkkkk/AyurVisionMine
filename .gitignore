@@ -2,6 +2,7 @@
 .env
 node_modules
 Dockerfile
+.dockerignore
 myenv
 __pycache__
 .venv

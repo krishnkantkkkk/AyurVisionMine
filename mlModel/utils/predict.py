@@ -15,5 +15,6 @@ def predict_skin_disease(model, image_url):
         
         predictions = model.predict(img_array, verbose=0)
         return predictions
-    except Exception as e:
-        print(e)
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            raise FileNotFoundError("URL is Invalid")
