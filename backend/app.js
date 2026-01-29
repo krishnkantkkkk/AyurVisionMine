@@ -8,15 +8,16 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const diseaseRouter = require('./routes/diseaseRouter');
 const { isLoggedIn } = require('./middlewares/isLoggedIn');
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(cookieParser());
 app.use(cors({
-    origin : "http://localhost:5173"
+    origin : process.env.FRONTEND_ORIGIN
 }));
 
 app.use('/users', userRouter);
 app.use('/diseases', isLoggedIn, diseaseRouter);
 
-app.listen(3000);
+app.listen(PORT, process.env.HOST, ()=>{console.log(`Server Running on port : ${PORT}`)});

@@ -1,0 +1,8 @@
+.vscode
+.env
+node_modules
+Dockerfile
+myenv
+__pycache__
+.venv
+myenv

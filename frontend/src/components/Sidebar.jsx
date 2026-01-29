@@ -26,7 +26,7 @@ const Sidebar = ()=>{
                 <Link to="/user/history" className="p-3 hover:text-black"><History /></Link>
             </div>
             <div className="flex flex-col gap-2">
-                <div className="p-3 hover:text-black cursor-pointer"><BadgeQuestionMark /></div>
+                {/* <div className="p-3 hover:text-black cursor-pointer"><BadgeQuestionMark /></div> */}
                 <div className="p-3 hover:text-black cursor-pointer" onClick={callLogout}><LogOut/></div>
             </div>
         </div>

@@ -18,6 +18,10 @@ const ProfilePage = () => {
             console.log(err);
         })
     }
+    const titleCase = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
     return (
         <div className="w-full h-full flex flex-col justify-start md:justify-between">
             <div className="w-full flex justify-center text-3xl">Profile</div>
@@ -28,7 +32,7 @@ const ProfilePage = () => {
                         let copyFormData = {...formData};
                         copyFormData.firstName = e.target.value;
                         setFormData(copyFormData);
-                    }} className="w-full p-3 rounded-lg max-w-90 bg-brand-light" type="text" defaultValue={user.firstName}/>
+                    }} className="w-full p-3 rounded-lg max-w-90 bg-brand-light" type="text" defaultValue={titleCase(user.firstName)}/>
                 </div>
                 <div className="">
                     <p>Last Name</p>
@@ -36,7 +40,7 @@ const ProfilePage = () => {
                         let copyFormData = {...formData};
                         copyFormData.lastName = e.target.value;
                         setFormData(copyFormData);
-                    }} className="w-full p-3 rounded-lg max-w-90 bg-brand-light" type="text" defaultValue={user.lastName}/>
+                    }} className="w-full p-3 rounded-lg max-w-90 bg-brand-light" type="text" defaultValue={titleCase(user.lastName)}/>
                 </div>
                 <div className="">
                     <p>Age</p>

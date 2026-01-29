@@ -1,0 +1,11 @@
+classes = [ 'Eczema',
+            'Warts Molluscum',
+            'Melanoma',
+            'Atopic Dermatitis',
+            'Basal Cell Carcinoma (BCC)',
+            'Melanocytic Nevi (NV)',
+            'Benign Keratosis-like Lesions (BKL)',
+            'Psoriasis pictures Lichen Planus',
+            'Seborrheic Keratoses or other Benign Tumors',
+            'Tinea Ringworm Candidiasis or other Fungal Infections',
+        ]

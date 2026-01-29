@@ -1,4 +1,4 @@
-const { default: cloudinary } = require('../config/cloudinary');
+const cloudinary = require('../config/cloudinary');
 const diseaseModel = require('../models/diseaseModel')
 
 module.exports.createDisease = async (req, res)=>{

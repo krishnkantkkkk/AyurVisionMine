@@ -22,7 +22,7 @@ const SignupForm = ()=>{
     }
 
     return(
-        <div className="w-full flex-1 bg-brand-accent flex flex-col rounded-4xl">
+        <div className="w-full flex-1 bg-brand-accent flex flex-col rounded-[10px] md:rounded-4xl overflow-hidden shadow-xl">
             <div className="p-5 h-50 flex justify-between items-center">
                 <Link to='/login'><ArrowLeft style={{color:'white'}} className="md:hidden"/></Link>
                 <h1 className="text-3xl text-center text-white">Sign Up</h1>
@@ -31,7 +31,7 @@ const SignupForm = ()=>{
             <form onSubmit={(e) =>{handleSubmit(e)}} action="" className="flex-1 flex flex-col justify-between items-center rounded-tl-[5rem] p-10 bg-white text-black">
                 <div className=""></div>
                 <div className="flex flex-col h-full justify-center gap-3">
-                    <div className="flex flex-col px-3 py-2 rounded-xl justify-center">
+                    <div className="flex flex-col px-3 py-2 rounded-xl justify-center border border-brand-neu">
                         <label>First Name</label>
                         <input value={formData.firstName} onChange={(e)=>{
                             let copyData = {...formData};
@@ -39,7 +39,7 @@ const SignupForm = ()=>{
                             setFormData(copyData);
                         }} className="outline-none w-[100%] py-2" type="text" placeholder="John" required/>
                     </div>
-                    <div className="flex flex-col px-3 py-2 rounded-xl justify-center">
+                    <div className="flex flex-col px-3 py-2 rounded-xl justify-center border border-brand-neu">
                         <label>Last Name</label>
                         <input value={formData.lastName} onChange={(e)=>{
                             let copyData = {...formData};
@@ -47,7 +47,7 @@ const SignupForm = ()=>{
                             setFormData(copyData);
                         }} className="outline-none w-[100%] py-2" type="text" placeholder="Doe" required/>
                     </div>
-                    <div className="flex flex-col px-3 py-2 rounded-xl justify-center">
+                    <div className="flex flex-col px-3 py-2 rounded-xl justify-center border border-brand-neu">
                         <label>Email</label>
                         <input value={formData.email} onChange={(e)=>{
                             let copyData = {...formData};
@@ -55,7 +55,7 @@ const SignupForm = ()=>{
                             setFormData(copyData);
                         }} className="outline-none w-[100%] py-2" type="text" placeholder="example@email.com" required/>
                     </div>
-                    <div className="flex flex-col px-3 py-2 rounded-xl justify-center">
+                    <div className="flex flex-col px-3 py-2 rounded-xl justify-center border border-brand-neu">
                         <label>Password</label>
                         <input value={formData.password} onChange={(e)=>{
                             let copyData = {...formData};

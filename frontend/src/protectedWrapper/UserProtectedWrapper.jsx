@@ -2,9 +2,12 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserDataContext } from "../contexts/UserContext";
+import { AxiosDataContext } from "../contexts/AxiosContext";
+import Loading from "../components/Loading";
 
 const UserProtectedWrapper = ({children})=>{
     const navigate = useNavigate();
+    const api = useContext(AxiosDataContext);
     const token = localStorage.getItem('token');
     const [isLoading, setIsLoading] = useState(true);
     const {setUser} = useContext(UserDataContext);
@@ -12,7 +15,7 @@ const UserProtectedWrapper = ({children})=>{
         if(!token){
             navigate('/login');
         }
-        axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/users/profile`, {
+        api.get('/users/profile', {
             headers : {
                 Authorization : `Bearer ${token}`
             }
@@ -22,13 +25,14 @@ const UserProtectedWrapper = ({children})=>{
                 setIsLoading(false);
             }
         }).catch(err=>{
+            setIsLoading(false);
             localStorage.removeItem('token');
             navigate('/login', {replace : true});
         })
     },[token, navigate, setUser])
     if(!token) return null;
 
-    if(isLoading) return <div className="flex h-full w-full justify-center items-center">Loading...</div>
+    if(isLoading) return <Loading/>
     return(
         <>
             {children}

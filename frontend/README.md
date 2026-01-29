@@ -1,16 +1,88 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+AyurVision Frontend Application
+ * A React-based frontend application for Ayurvedic vision analysis and diagnosis.
+ * This is a modern, responsive web application built with Vite, React, and Tailwind CSS.
+ * 
+ * @project AyurVision
+ * @version 1.0.0
+ * @description Frontend interface for analyzing Ayurvedic health conditions through vision examination
+## Project Structure
+ * ### Root Configuration Files
+ * - `vite.config.js` - Vite build configuration
+ * - `tailwind.config.js` - Tailwind CSS framework configuration
+ * - `eslint.config.js` - ESLint linting rules configuration
+ * - `.env` - Environment variables (API endpoints, keys, etc.)
+ * - `.gitignore` - Git ignore patterns
+ * - `package.json` - Project dependencies and scripts
+ * - `README.md` - Project documentation
+ * - `index.html` - HTML entry point
+ * 
+ * ### Source Directory (`src/`)
+ * 
+ * #### Core Files
+ * - `main.jsx` - Application entry point, React DOM rendering
+ * - `App.jsx` - Root component with routing and app-level logic
+ * - `index.css` - Global styles and CSS utilities
+ * 
+ * #### Components (`src/components/`)
+ * Reusable UI components throughout the application:
+ * - `ExamineCard.jsx` - Card component for displaying examination options
+ * - `GetStartedButton.jsx` - Call-to-action button component
+ * - `Hero.jsx` - Hero section component for landing/home pages
+ * - `Loading.jsx` - Loading spinner/skeleton component
+ * - `LoginForm.jsx` - User login form component
+ * - `Navbar.jsx` - Navigation bar component
+ * - `NeuButton.jsx` - Neumorphic design button component
+ * - `Sidebar.jsx` - Sidebar navigation component
+ * - `SignupForm.jsx` - User registration form component
+ * 
+ * #### Context API (`src/contexts/`)
+ * State management using React Context:
+ * - `UserContext.jsx` - Global user authentication and profile state management
+ * 
+ * #### Pages (`src/pages/`)
+ * Full-page components representing different routes:
+ * - `Home.jsx` - Landing/home page
+ * - `LoginPage.jsx` - User login page
+ * - `SignupPage.jsx` - User registration page
+ * - `Dashboard.jsx` - Main user dashboard
+ * - `ExaminePage.jsx` - Examination/assessment page
+ * - `UploadPage.jsx` - Image/file upload interface
+ * - `AnalysisPage.jsx` - Analysis results and findings display
+ * - `HistoryPage.jsx` - User examination history and records
+ * - `ProfiePage.jsx` - User profile and settings page
+ * 
+ * #### Protected Routes (`src/protectedWrapper/`)
+ * Components for route protection and authentication:
+ * - `UserProtectedWrapper.jsx` - Wrapper for authenticated user-only routes
+ * - `AuthRedirectProtectedWrapper.jsx` - Wrapper to redirect unauthenticated users
+ * 
+ * #### Utilities (`src/utils/`)
+ * Helper functions and utility modules for common tasks
+ * 
+ * #### Assets (`src/assets/`)
+ * Static assets (images, icons, fonts, etc.)
+ * 
+ * ## Technology Stack
+ * - **Frontend Framework**: React 18+
+ * - **Build Tool**: Vite
+ * - **Styling**: Tailwind CSS
+ * - **Linting**: ESLint
+ * - **State Management**: React Context API
+ * - **Routing**: React Router (inferred from page structure)
+ * 
+ * ## Key Features
+ * - User authentication (Login/Signup)
+ * - User profile and dashboard
+ * - Vision-based examination interface
+ * - Image upload and processing
+ * - Analysis results display
+ * - Examination history tracking
+ * - Responsive design with Tailwind CSS
+ * - Protected routes for authenticated users
+ * 
+ * ## Getting Started
+ * - Install dependencies: `npm install`
+ * - Set up environment variables in `.env`
+ * - Run development server: `npm run dev`
+ * - Build for production: `npm run build`
+ * @author Krishn Kant Kumar

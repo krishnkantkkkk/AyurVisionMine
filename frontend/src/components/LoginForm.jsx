@@ -1,30 +1,37 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
-import axios from "axios";
 import { UserDataContext } from "../contexts/UserContext";
+import { AxiosDataContext } from "../contexts/AxiosContext";
+import Loading from "../components/Loading"
 const LoginForm = ()=>{
 
     const [formData, setFormData] = useState({email : '', password : ''});
     const navigate = useNavigate();
     const {user, setUser} = useContext(UserDataContext);
+    const api = useContext(AxiosDataContext);
+    const [isLoading, setIsLoading] = useState(false);
     const handleSubmit = async (e)=>{
         e.preventDefault();
         setFormData({email : '', password : ''});
-        const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/users/login`;
-        try{
-            const response = await axios.post(url, formData);
-            if(response.status === 201){
-                setUser(response.data.user);
-                localStorage.setItem('token', response.data.token);
-                navigate('/user');
-            }
-        }catch(err){
-            console.log(err);
-        }
+        setIsLoading(true);
+        api.post('/users/login', formData)
+        .then(response => {
+            setUser(response.data.user);
+            localStorage.setItem('token', response.data.token);
+            navigate('/user');
+            setIsLoading(false);
+        })
+        .catch(err =>{
+            if(err.message === 'timeout of 8000ms exceeded') console.log("Sever busy...");
+            else console.log(err);
+            setIsLoading(false);
+        })
     }
 
+    if(isLoading) return <Loading/>
+
     return(
-        <div className="bg-brand-accent flex flex-col flex-1 rounded-4xl">
+        <div className="bg-brand-accent flex flex-col flex-1 rounded-[10px] md:rounded-4xl md:shadow-xl overflow-hidden">
             <div className="p-5 h-50 flex justify-between items-center">
                 <div className=""></div>
                 <h1 className="text-3xl text-center text-white">Login</h1>
@@ -33,15 +40,15 @@ const LoginForm = ()=>{
             <form onSubmit={(e)=>{handleSubmit(e)}} action="" className="w-full flex-3 flex flex-col justify-between items-center rounded-tl-[5rem] p-10 bg-white text-black bg-brand-light">
                 <div className=""></div>
                 <div className="flex flex-col h-full justify-center gap-3">
-                    <div className="flex flex-col mb-5 p-3 rounded-xl">
+                    <div className="flex flex-col mb-5 p-3 rounded-xl border border-brand-neu">
                         <label>Email</label>
                         <input onChange={(e)=>{
                             let copyData = {...formData};
-                            copyData.email = e.target.value;
+                            copyData.email = e.target.value.toLowerCase();
                             setFormData(copyData);
                         }} className="outline-none w-[100%] py-2" type="text" placeholder="example@email.com" value={formData.email} required/>
                     </div>
-                    <div className="flex flex-col mb-5 p-3 rounded-xl">
+                    <div className="flex flex-col mb-5 p-3 rounded-xl border border-brand-neu">
                         <label>Password</label>
                         <input onChange={(e)=>{
                             let copyData = {...formData};

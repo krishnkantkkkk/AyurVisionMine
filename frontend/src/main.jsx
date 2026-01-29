@@ -4,11 +4,14 @@ import './index.css'
 import App from './App.jsx'
 import {BrowserRouter} from 'react-router-dom'
 import UserContext from './contexts/UserContext.jsx'
+import AxiosContext from './contexts/AxiosContext.jsx'
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
-        <UserContext>
-          <App />
-        </UserContext>
+        <AxiosContext>
+            <UserContext>
+                <App />
+            </UserContext>
+        </AxiosContext>
     </BrowserRouter>
 )
