@@ -6,7 +6,7 @@ const HistoryPage = () => {
     const [diseasesList, setDiseasesList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     useEffect(()=>{
-        axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/diseases/fetchOnePatientAllDiseases`, {
+        axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/diseases/fetchOnePatientAllDiseases`,{
             headers : {
                 Authorization : `Bearer ${localStorage.getItem('token')}`
             }
@@ -14,7 +14,6 @@ const HistoryPage = () => {
             setDiseasesList(response.data.diseasesList);
             setIsLoading(false);
         }).catch(err =>{
-            console.log(err);
             setIsLoading(false);
         })
     }, [])
@@ -28,6 +27,7 @@ const HistoryPage = () => {
                     const date = new Date(disease.date)
                     return (
                         <ExamineCard key = {disease._id}
+                            id = {disease._id}
                             image={disease.image}
                             title={disease.name}
                             description={disease.description}

@@ -1,29 +1,31 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { AxiosDataContext } from '../contexts/AxiosContext';
+import Loading from '../components/Loading'
 
 const AnalysisPage = ({id}) => {
-    const [isLoading, setIsLoading] = useState(true);
     const [disease, setDisease] = useState({});
-    useEffect(()=>{
-        axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/diseases/create`, {
-            name : "Alchimosis",
-            description : "This is the disease."
-        }, {
+    const api = useContext(AxiosDataContext);
+    const [isLoading, setIsLoading] = useState(false);
+    useEffect(() =>{
+        setIsLoading(true);
+        api.get(`/diseases/fetchOne/${id}`,{
             headers : {
-                Authorization : `Bearer ${localStorage.token}`
+                Authorization : `Bearer ${localStorage.getItem('token')}`
             }
         }).then(response =>{
-            console.log(response.data)
-            setDisease(response.data);
+            setDisease(response.data.disease);
             setIsLoading(false);
-        }).catch(err=>{
-            setIsLoading(false);
+        }).catch(err =>{
             console.log(err);
+            setIsLoading(false);
         })
-    }, [setDisease])
-    if(isLoading) <div className="w-full h-full justify-center items-center">Loading...</div>
+    }, [])
+    if(isLoading) return <Loading/>
   return (
-    <div>{disease.name}</div>
+    <div>
+        <img src={disease.image}/>
+        {disease.name}
+    </div>
   )
 }
 

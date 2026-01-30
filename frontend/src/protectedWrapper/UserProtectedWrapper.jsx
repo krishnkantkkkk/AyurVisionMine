@@ -26,8 +26,13 @@ const UserProtectedWrapper = ({children})=>{
             }
         }).catch(err=>{
             setIsLoading(false);
-            localStorage.removeItem('token');
-            navigate('/login', {replace : true});
+            if(err.code === 'ERR_NETWORK'){
+                console.log("Network Error")
+            }
+            else{
+                localStorage.removeItem('token');
+                navigate('/login', {replace : true});
+            }
         })
     },[token, navigate, setUser])
     if(!token) return null;
