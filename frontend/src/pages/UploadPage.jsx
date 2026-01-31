@@ -1,13 +1,14 @@
 import axios from "axios";
 import { Upload, ArrowRight} from "lucide-react"
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom'
+import { AxiosDataContext } from "../contexts/AxiosContext";
 const UploadPage = () => {
     const fileInputRef = useRef(null);
     const [imageUrl, setImageUrl] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const token = localStorage.getItem('token');
+    const api = useContext(AxiosDataContext);
 
     const navigate = useNavigate();
 
@@ -22,11 +23,8 @@ const UploadPage = () => {
         e.preventDefault();
         const formData = new FormData();
         formData.append("image", imageFile);
-        axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/diseases/create`, formData, {
-            headers : {
-                Authorization : `Bearer ${token}`,
-            }
-        }).then(response =>{
+        api.post(`/diseases/create`, formData)
+        .then(response =>{
             setIsLoading(false);
             navigate(`/user/examine/${response.data.disease._id}`)
         }).catch(err=>{

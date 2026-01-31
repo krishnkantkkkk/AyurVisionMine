@@ -8,11 +8,7 @@ const AnalysisPage = ({id}) => {
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() =>{
         setIsLoading(true);
-        api.get(`/diseases/fetchOne/${id}`,{
-            headers : {
-                Authorization : `Bearer ${localStorage.getItem('token')}`
-            }
-        }).then(response =>{
+        api.get(`/diseases/fetchOne/${id}`).then(response =>{
             setDisease(response.data.disease);
             setIsLoading(false);
         }).catch(err =>{

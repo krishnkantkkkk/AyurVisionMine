@@ -16,7 +16,8 @@ module.exports.userRegister = async (req, res)=>{
         });
         user.password = undefined;
         const token = tokenGenerator({userid : user._id});
-        return res.status(201).json({token, user});
+        res.cookie("token", token);
+        return res.status(201).json({user});
     }catch(err){
         console.log(err.message);
     }
@@ -30,8 +31,9 @@ module.exports.userLogin = async (req, res)=>{
            const result = await verifyPassword(password, user.password);
            if(result) {
                 const token = tokenGenerator({userid : user._id});
-                user.password = undefined
-                return res.status(201).json({token , user});
+                res.cookie('token', token);
+                user.password = undefined;
+                return res.status(201).json({user});
            }
            return res.status(401).json({message : "Invalid email or password"});
         }
@@ -44,7 +46,7 @@ module.exports.userLogin = async (req, res)=>{
 module.exports.userLogout = (req, res)=>{
     try{
         res.clearCookie('token');
-        res.send("Logout successful");
+        res.json({message : "Logout Successfull"});
     }catch(err){
         console.log(err.message);
     }

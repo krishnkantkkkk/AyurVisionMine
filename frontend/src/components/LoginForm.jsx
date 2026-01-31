@@ -17,18 +17,17 @@ const LoginForm = ()=>{
         api.post('/users/login', formData)
         .then(response => {
             setUser(response.data.user);
-            localStorage.setItem('token', response.data.token);
             navigate('/user');
-            setIsLoading(false);
         })
         .catch(err =>{
-            if(err.message === 'timeout of 8000ms exceeded') console.log("Sever busy...");
-            else console.log(err);
+            console.log(err);
+        })
+        .finally(() =>{
             setIsLoading(false);
         })
     }
 
-    if(isLoading) return <Loading/>
+    if(isLoading) return <div className="absolute h-full w-full bg-white top-0 left-0"><Loading/></div>
 
     return(
         <div className="bg-brand-accent flex flex-col flex-1 rounded-[10px] md:rounded-4xl md:shadow-xl overflow-hidden">

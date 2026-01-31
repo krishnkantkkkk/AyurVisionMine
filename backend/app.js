@@ -10,11 +10,12 @@ const diseaseRouter = require('./routes/diseaseRouter');
 const { isLoggedIn } = require('./middlewares/isLoggedIn');
 const PORT = process.env.PORT || 3000;
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-app.use(cookieParser());
 app.use(cors({
-    origin : process.env.FRONTEND_ORIGIN
+    origin : process.env.FRONTEND_ORIGIN, 
+    credentials: true
 }));
 
 app.use('/users', userRouter);

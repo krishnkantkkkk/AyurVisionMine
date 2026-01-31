@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserDataContext } from "../contexts/UserContext";
@@ -8,36 +7,31 @@ import Loading from "../components/Loading";
 const UserProtectedWrapper = ({children})=>{
     const navigate = useNavigate();
     const api = useContext(AxiosDataContext);
-    const token = localStorage.getItem('token');
     const [isLoading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const {setUser} = useContext(UserDataContext);
     useEffect(()=>{
-        if(!token){
-            navigate('/login');
-        }
-        api.get('/users/profile', {
-            headers : {
-                Authorization : `Bearer ${token}`
-            }
-        }).then(response =>{
+        api.get('/users/profile')
+        .then(response =>{
             if(response.status === 200){
                 setUser(response.data);
-                setIsLoading(false);
+                setIsAuthenticated(true);
+                localStorage.setItem('isLoggedIn', true)
             }
         }).catch(err=>{
-            setIsLoading(false);
-            if(err.code === 'ERR_NETWORK'){
-                console.log("Network Error")
+            if(err.code === "ERR_NETWORK"){
+                console.log("Network Error");
             }
             else{
-                localStorage.removeItem('token');
+                localStorage.removeItem('isLoggedIn');
                 navigate('/login', {replace : true});
             }
+        }).finally(()=>{
+            setIsLoading(false);
         })
-    },[token, navigate, setUser])
-    if(!token) return null;
-
+    },[navigate, setUser])
     if(isLoading) return <Loading/>
+    if(!isAuthenticated) return null;
     return(
         <>
             {children}

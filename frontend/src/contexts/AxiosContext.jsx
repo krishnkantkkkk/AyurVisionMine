@@ -6,7 +6,7 @@ export const AxiosDataContext = createContext()
 const AxiosContext = ({children})=>{
     const api = axios.create({
         baseURL : import.meta.env.VITE_BACKEND_BASE_URL,
-        timeout : 8000
+        withCredentials: true
     })
     return(
         <div>

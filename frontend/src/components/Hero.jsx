@@ -20,7 +20,7 @@ const Hero = () => {
           Online medical consultations with certified medical professionals
         </p>
         <div>
-          {localStorage.getItem('token') ? "" : <Link to="/login"><GetStartedButton/></Link>}
+          {localStorage.getItem('isLoggedIn') ? "" : <Link to="/login"><GetStartedButton/></Link>}
         </div>
 
       </div>

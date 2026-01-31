@@ -1,18 +1,15 @@
 import { useContext, useEffect, useState } from "react"
 import avatar from "../assets/avatar.jpg"
 import { UserDataContext } from "../contexts/UserContext"
-import axios from "axios";
+import { AxiosDataContext } from "../contexts/AxiosContext";
 const ProfilePage = () => {
     const {user, setUser} = useContext(UserDataContext);
     const [formData, setFormData] = useState(user);
-    const token = localStorage.getItem('token')
+    const api = useContext(AxiosDataContext);
     const handleSubmit = (e)=>{
         e.preventDefault();
-        axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/users/update`, formData, {
-            headers : {
-                Authorization : `Bearer ${token}`
-            },
-        }).then(response =>{
+        api.post(`/users/update`, formData)
+        .then(response =>{
             setUser(response.data);
         }).catch(err =>{
             console.log(err);
@@ -54,7 +51,7 @@ const ProfilePage = () => {
                     <p>Email</p>
                     <input className="w-full p-3 rounded-lg max-w-90 bg-brand-light opacity-70" type="text" defaultValue={user.email} disabled/>
                 </div>
-                <button className="mt-5 bg-brand-accent text-white py-3 px-5 rounded-xl">Update</button>
+                <button className="mt-5 bg-brand-accent text-white py-3 px-5 rounded-xl active:scale-95 hover:bg-brand-accentDark cursor-pointer">Update</button>
             </form>
             <div className=""></div>
             <img className="z-10 absolute top-[60%] md:top-[42%] md:right-[5%] right-[12%] h-52 w-52 rounded-full border-[10px] border-brand-beige object-cover object-top" src={avatar} alt="" />

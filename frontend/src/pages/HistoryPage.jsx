@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AxiosDataContext } from "../contexts/AxiosContext";
 import ExamineCard from "../components/ExamineCard";
-import axios from "axios";
 import Loading from "../components/Loading";
 const HistoryPage = () => {
     const [diseasesList, setDiseasesList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const api = useContext(AxiosDataContext);
     useEffect(()=>{
-        axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/diseases/fetchOnePatientAllDiseases`,{
-            headers : {
-                Authorization : `Bearer ${localStorage.getItem('token')}`
-            }
-        }).then(response =>{
+        api.get(`/diseases/fetchOnePatientAllDiseases`)
+        .then(response =>{
             setDiseasesList(response.data.diseasesList);
             setIsLoading(false);
         }).catch(err =>{
