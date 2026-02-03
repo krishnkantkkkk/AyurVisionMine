@@ -23,14 +23,18 @@ const UploadPage = () => {
         e.preventDefault();
         const formData = new FormData();
         formData.append("image", imageFile);
-        api.post(`/diseases/create`, formData)
-            .then(response => {
-                setIsLoading(false);
-                navigate(`/user/examine/${response.data.disease._id}`)
-            }).catch(err => {
-                setIsLoading(false);
-                // err ignored
-            })
+        api.post(`/diseases/create`, formData, {
+            headers:{
+                Authorization : `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then(response => {
+            setIsLoading(false);
+            navigate(`/user/examine/${response.data.disease._id}`)
+        }).catch(err => {
+            setIsLoading(false);
+            // err ignored
+        })
     }
 
     if (isLoading) return <div className="flex h-full w-full justify-center items-center">Loading...</div>
