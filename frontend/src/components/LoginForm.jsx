@@ -10,6 +10,7 @@ const LoginForm = ()=>{
     const {user, setUser} = useContext(UserDataContext);
     const api = useContext(AxiosDataContext);
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("")
     const handleSubmit = async (e)=>{
         e.preventDefault();
         setFormData({email : '', password : ''});
@@ -17,10 +18,13 @@ const LoginForm = ()=>{
         api.post('/users/login', formData)
         .then(response => {
             setUser(response.data.user);
+            localStorage.setItem('token', response.data.token)
             navigate('/user');
         })
         .catch(err =>{
-            console.log(err);
+            if(err.response.status === 401){
+                setErrorMessage(err.response.data.message);
+            }
         })
         .finally(() =>{
             setIsLoading(false);
@@ -38,6 +42,7 @@ const LoginForm = ()=>{
             </div>
             <form onSubmit={(e)=>{handleSubmit(e)}} action="" className="w-full flex-3 flex flex-col justify-between items-center rounded-tl-[5rem] p-10 bg-white text-black bg-brand-light">
                 <div className=""></div>
+                <div className="h-10 text-red-400">{errorMessage}</div>
                 <div className="flex flex-col h-full justify-center gap-3">
                     <div className="flex flex-col mb-5 p-3 rounded-xl border border-brand-neu">
                         <label>Email</label>

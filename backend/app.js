@@ -1,13 +1,16 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv'
 dotenv.config();
-const express = require('express');
+
+import express from 'express'
+import userRouter from './routes/userRouter.js'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import diseaseRouter from './routes/diseaseRouter.js'
+import isLoggedIn from './middlewares/isLoggedIn.js'
+
+import './db/db.js'
+
 const app = express();
-const userRouter = require('./routes/userRouter');
-const db = require('./db/db');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const diseaseRouter = require('./routes/diseaseRouter');
-const { isLoggedIn } = require('./middlewares/isLoggedIn');
 const PORT = process.env.PORT || 3000;
 
 app.use(cookieParser());

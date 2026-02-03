@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const tokenGenerator = (element)=>{
     return jwt.sign(element, process.env.JWT_KEY);
 }
 
-module.exports.tokenGenerator = tokenGenerator;
+export default tokenGenerator

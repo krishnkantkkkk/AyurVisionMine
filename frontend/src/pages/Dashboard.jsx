@@ -1,12 +1,10 @@
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Upload, History, User, Activity, Zap, Shield } from 'lucide-react';
-import { AxiosDataContext } from '../contexts/AxiosContext';
+import { Upload, History } from 'lucide-react';
 import { UserDataContext } from '../contexts/UserContext';
 
 const Dashboard = () => {
-    const api = useContext(AxiosDataContext);
-    const {user} = useContext(UserDataContext);
+    const {user, diseasesList} = useContext(UserDataContext);
     return (
         <div className="w-full h-full flex flex-col overflow-y-auto pb-10">
             <div className="px-6 md:px-12 pt-8 md:pt-12 pb-6">
@@ -33,7 +31,7 @@ const Dashboard = () => {
                     <div className="flex items-center justify-between mb-3">
                         <h3 className="text-sm font-semibold text-brand-darker">Total Analyses</h3>
                     </div>
-                    <p className="text-3xl font-bold text-brand-text">{0}</p>
+                    <p className="text-3xl font-bold text-brand-text">{diseasesList.length||0}</p>
                     <p className="text-xs text-brand-dark mt-2">All time records</p>
                 </div>
 

@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
+import { createDisease, fetchOneDisease, fetchOnePatientAllDiseases } from '../controllers/diseaseController.js';
+import upload from '../config/multerConfig.js';
+
 const router = express.Router();
-const { createDisease, fetchOneDisease, analyzeDisease, fetchOnePatientAllDiseases } = require('../controllers/diseaseController');
-const upload = require('../utils/multerConfig')
 
 router.post('/create', upload.single("image"), createDisease);
 router.get('/fetchOne/:id', fetchOneDisease);
 router.get('/fetchOnePatientAllDiseases', fetchOnePatientAllDiseases)
-// router.post('/analyze', upload.single("image"), analyzeDisease);
 
-module.exports = router;
+export default router

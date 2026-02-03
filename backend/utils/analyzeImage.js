@@ -12,4 +12,4 @@ const analyzeImage = async (image_url) =>{
     return ml_response;
 }
 
-module.exports.analyzeImage = analyzeImage;
+export default analyzeImage

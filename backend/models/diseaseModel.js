@@ -1,26 +1,20 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const diseaseSchema = mongoose.Schema({
     name : {
         type : String, 
     },
-    description : {
-        type : String,
-    },
     image : {
         type : String,
     },
-    cause : {
-        type : String
+    causes : {
+        type : Array
     },
-    remedies : {
-        type : String
+    home_remedies : {
+        type : Array
     },
-    suggestion : {
-        type : String
-    },
-    suggestion_seriousness : {
-        type : Number
+    suggestions : {
+        type : Array
     },
     date : {
         type : Date,
@@ -32,4 +26,4 @@ const diseaseSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('disease', diseaseSchema);
+export default mongoose.model('disease', diseaseSchema);

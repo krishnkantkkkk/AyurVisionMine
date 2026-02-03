@@ -1,67 +1,73 @@
-const userModel = require('../models/userModel')
-const {hashGenerator} = require('../utils/hashGenerator');
-const {tokenGenerator} = require('../utils/tokenGenerator');
-const {verifyPassword} = require('../utils/verifyPassword');
-const jwt = require('jsonwebtoken');
+import userModel from '../models/userModel.js';
+import hashGenerator from '../utils/hashGenerator.js';
+import tokenGenerator from '../utils/tokenGenerator.js';
+import verifyPassword from '../utils/verifyPassword.js';
 
-module.exports.userRegister = async (req, res)=>{
-    try{
-        const {firstName, lastName, email, password} = req.body;
-        if(await userModel.findOne({email})) return res.status(400).json({message : "User already exists"});
+export const userRegister = async (req, res) => {
+    try {
+        const { firstName, lastName, email, password } = req.body;
+        if (await userModel.findOne({ email })) return res.status(400).json({ message: "User already exists" });
         const user = await userModel.create({
             firstName,
-            lastName, 
+            lastName,
             email,
-            password : await hashGenerator(password)
+            password: await hashGenerator(password)
         });
         user.password = undefined;
-        const token = tokenGenerator({userid : user._id});
-        res.cookie("token", token);
-        return res.status(201).json({user});
-    }catch(err){
+        const token = tokenGenerator({ userid: user._id });
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
+        });
+        return res.status(201).json({ user, token });
+    } catch (err) {
         console.log(err.message);
+        res.status(500).json({ message: "Internal Server Error" })
     }
 }
 
-module.exports.userLogin = async (req, res)=>{ 
-    try{
-        const {email, password} = req.body;
-        const user = await userModel.findOne({email}).select("+password");
-        if(user){
-           const result = await verifyPassword(password, user.password);
-           if(result) {
-                const token = tokenGenerator({userid : user._id});
-                res.cookie('token', token);
+export const userLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await userModel.findOne({ email }).select("+password");
+        if (user) {
+            const result = await verifyPassword(password, user.password);
+            if (result) {
+                const token = tokenGenerator({ userid: user._id });
                 user.password = undefined;
-                return res.status(201).json({user});
-           }
-           return res.status(401).json({message : "Invalid email or password"});
+                return res.status(200).json({ user, token });
+            }
+            return res.status(401).json({ message: "Invalid email or password" });
         }
-        return res.status(401).json({message : "Invalid email or passowrd"});
-    }catch(err){
+        return res.status(401).json({ message: "Invalid email or password" });
+    } catch (err) {
         console.log(err.message);
+        res.status(500).json({ message: "Internal Server Error" })
     }
 }
 
-module.exports.userLogout = (req, res)=>{
-    try{
+export const userLogout = (req, res) => {
+    try {
         res.clearCookie('token');
-        res.json({message : "Logout Successfull"});
-    }catch(err){
+        res.json({ message: "Logout Successfull" });
+    } catch (err) {
         console.log(err.message);
+        res.status(500).json({ message: "Internal Server Error" })
     }
 }
 
-module.exports.userUpdate = async (req, res)=>{
-    try{
-        const {firstName, lastName, email, age} = req.body;
-        const user = await userModel.findOneAndUpdate({_id : req.user._id}, {firstName, lastName, email, age}, {new : true});
+export const userUpdate = async (req, res) => {
+    try {
+        const { firstName, lastName, email, age } = req.body;
+        const user = await userModel.findOneAndUpdate({ _id: req.user._id }, { firstName, lastName, email, age }, { new: true });
         res.status(200).json(user);
-    }catch(err){
+    } catch (err) {
         console.log(err);
+        res.status(500).json({ message: "Internal Server Error" })
     }
 }
 
-module.exports.userProfile = (req, res)=>{
+export const userProfile = (req, res) => {
     res.status(200).json(req.user);
 }

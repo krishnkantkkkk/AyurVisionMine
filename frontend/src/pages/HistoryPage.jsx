@@ -1,27 +1,14 @@
-import { useContext, useEffect, useState } from "react";
-import { AxiosDataContext } from "../contexts/AxiosContext";
+import { useContext } from "react";
 import ExamineCard from "../components/ExamineCard";
-import Loading from "../components/Loading";
+import { UserDataContext } from "../contexts/UserContext";
 const HistoryPage = () => {
-    const [diseasesList, setDiseasesList] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const api = useContext(AxiosDataContext);
-    useEffect(()=>{
-        api.get(`/diseases/fetchOnePatientAllDiseases`)
-        .then(response =>{
-            setDiseasesList(response.data.diseasesList);
-            setIsLoading(false);
-        }).catch(err =>{
-            setIsLoading(false);
-        })
-    }, [])
-    if(isLoading) return <Loading/>
+    const {diseasesList} = useContext(UserDataContext);
     return (
         <>
             <div className="w-full text-center text-3xl mb-10">History</div>
             <div className="flex flex-1 flex-wrap gap-5 justify-center md:justify-start">
             {
-                diseasesList.map((disease)=>{
+                diseasesList.length > 0 ? diseasesList.map((disease)=>{
                     const date = new Date(disease.date)
                     return (
                         <ExamineCard key = {disease._id}
@@ -32,7 +19,7 @@ const HistoryPage = () => {
                             date={disease.date}
                         />
                     )
-                })
+                }) : ""
             }
             </div>
         </>

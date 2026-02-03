@@ -5,6 +5,21 @@ input {
     outline: none;
 }
 
-.clip-custom {
-    clip-path: path();
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF3EC;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #F5E5D3;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D3D3C1;
 }

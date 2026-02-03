@@ -1,25 +1,37 @@
 import { ArrowLeft } from "lucide-react"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import axios from 'axios'
+import { UserDataContext } from "../contexts/UserContext"
+import { AxiosDataContext } from "../contexts/AxiosContext"
+import Loading from "./Loading"
 const SignupForm = ()=>{
     const navigate = useNavigate();
     const [formData, setFormData] = useState({firstName : '', lastName : '', email : '', password : ''});
+    const [errorMessage, setErrorMessage] = useState("");
+    const api = useContext(AxiosDataContext);
+    const {setUser} = useContext(UserDataContext);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e)=>{
+        setIsLoading(true);
         e.preventDefault();
         setFormData({firstName : '', lastName : '', email : '', password : ''});
-        const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/users/register`;
-        try{
-            const response = await axios.post(url, formData);
-            if(response.status === 201){
-                localStorage.setItem('token', response.data.token);
-                navigate('/user')
-            }
-        }catch(err) {
-            console.log(err);
-        }
+        api.post('users/register', formData)
+        .then(response =>{
+            setUser(response.data.user);
+            localStorage.setItem('token', response.data.token);
+            navigate('/user');
+        })
+        .catch(err =>{
+            setErrorMessage(err.response.data.message);
+        })
+        .finally(()=>{
+            setIsLoading(false);
+        })
     }
+
+    if(isLoading) return <div className="absolute h-full w-full bg-white top-0 left-0"><Loading/></div>
 
     return(
         <div className="w-full flex-1 bg-brand-accent flex flex-col rounded-[10px] md:rounded-4xl overflow-hidden shadow-xl">
@@ -30,6 +42,7 @@ const SignupForm = ()=>{
             </div>
             <form onSubmit={(e) =>{handleSubmit(e)}} action="" className="flex-1 flex flex-col justify-between items-center rounded-tl-[5rem] p-10 bg-white text-black">
                 <div className=""></div>
+                <div className="h-10 text-red-400">{errorMessage}</div>
                 <div className="flex flex-col h-full justify-center gap-3">
                     <div className="flex flex-col px-3 py-2 rounded-xl justify-center border border-brand-neu">
                         <label>First Name</label>

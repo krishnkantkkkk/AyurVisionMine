@@ -1,7 +1,8 @@
 const callLogout = (api, navigate) => {
-    api.get(`/users/logout`).then(response=>{
+    api.get(`/users/logout`).then(()=>{
         localStorage.removeItem('isLoggedIn');
-        navigate('/');
+        localStorage.removeItem('token')
+        navigate('/login');
     })
 }
 

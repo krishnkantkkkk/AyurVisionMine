@@ -1,23 +1,25 @@
 import GetStartedButton from './GetStartedButton';
 import { Link } from 'react-router-dom';
+import stoneBlender from '/stoneBlender.png'
 
 const Hero = () => {
   return (
     <main className="w-full h-full flex flex-col md:flex-row md:mt-0">
       <div className="z-10 w-full md:w-1/2 pt-10 md:pt-20 pl-8 md:pl-16 flex flex-col justify-center min-h-125 md:min-h-150">
-        <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight mb-6">
-          <span className="bg-gradient-to-r from-brand-accent via-brand-primary to-brand-earth bg-clip-text text-transparent block">
+        <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight mb-6 text-shadow-2xs" style={{ WebkitTextStroke: "1px #B2734C" }}>
+          <span className="text-brand-accent">
             Medical &
           </span>
-          <span className="bg-gradient-to-r from-brand-accent via-brand-primary to-brand-earth bg-clip-text text-transparent block">
+          <br />
+          <span className="text-brand-accent">
             Health Care
           </span>
-          <span className="text-brand-text block">
+          <span className="text-brand-text block" style={{ WebkitTextStroke: "0" }}>
             Services
           </span>
         </h1>
-        <p className="text-black text-sm md:text-base max-w-md mb-10 leading-relaxed font-normal">
-          Online medical consultations with certified medical professionals
+        <p className="text-lg md:text-base max-w-md mb-10 font-normal">
+          Machine-learning–based Ayurveda solutions combining ancient wisdom with modern intelligence.
         </p>
         <div>
           {localStorage.getItem('isLoggedIn') ? "" : <Link to="/login"><GetStartedButton/></Link>}
@@ -43,6 +45,7 @@ const Hero = () => {
                 clipPath="url(#myClip)"
             />
         </svg>
+        <img src={stoneBlender} className='absolute bottom-0 md:top-[15%] right-[15%] max-w-[70%] drop-shadow-xl/25' />
     </main>
   );
 };

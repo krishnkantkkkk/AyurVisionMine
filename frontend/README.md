@@ -1,88 +1,82 @@
-AyurVision Frontend Application
- * A React-based frontend application for Ayurvedic vision analysis and diagnosis.
- * This is a modern, responsive web application built with Vite, React, and Tailwind CSS.
- * 
- * @project AyurVision
- * @version 1.0.0
- * @description Frontend interface for analyzing Ayurvedic health conditions through vision examination
+# AyurVision - Frontend
+
+A modern, responsive web interface for the AyurVision skin disease detection platform. Built with React 19, Vite 7, and Tailwind CSS 4, it provides a seamless user experience for uploading images, viewing analysis results, and managing medical history.
+
+## Features
+
+-   **Modern UI/UX**: Clean, responsive interface built with Tailwind CSS v4.
+-   **Authentication**: Integrated Login and Signup forms with secure JWT handling.
+-   **Dashboard**: Centralized hub for users to manage their profile and history.
+-   **Image Upload**: Drag-and-drop support for skin image analysis.
+-   **Real-time Analysis**: Instant display of ML predictions and AI-generated remedies.
+-   **Route Protection**: Secure routes that redirect unauthenticated users.
+
+## Technology Stack
+
+-   **Framework**: [React 19](https://react.dev/)
+-   **Build Tool**: [Vite 7](https://vitejs.dev/)
+-   **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+-   **Routing**: [React Router 7](https://reactrouter.com/)
+-   **Icons**: [Lucide React](https://lucide.dev/)
+-   **HTTP Client**: [Axios](https://axios-http.com/)
+
 ## Project Structure
- * ### Root Configuration Files
- * - `vite.config.js` - Vite build configuration
- * - `tailwind.config.js` - Tailwind CSS framework configuration
- * - `eslint.config.js` - ESLint linting rules configuration
- * - `.env` - Environment variables (API endpoints, keys, etc.)
- * - `.gitignore` - Git ignore patterns
- * - `package.json` - Project dependencies and scripts
- * - `README.md` - Project documentation
- * - `index.html` - HTML entry point
- * 
- * ### Source Directory (`src/`)
- * 
- * #### Core Files
- * - `main.jsx` - Application entry point, React DOM rendering
- * - `App.jsx` - Root component with routing and app-level logic
- * - `index.css` - Global styles and CSS utilities
- * 
- * #### Components (`src/components/`)
- * Reusable UI components throughout the application:
- * - `ExamineCard.jsx` - Card component for displaying examination options
- * - `GetStartedButton.jsx` - Call-to-action button component
- * - `Hero.jsx` - Hero section component for landing/home pages
- * - `Loading.jsx` - Loading spinner/skeleton component
- * - `LoginForm.jsx` - User login form component
- * - `Navbar.jsx` - Navigation bar component
- * - `NeuButton.jsx` - Neumorphic design button component
- * - `Sidebar.jsx` - Sidebar navigation component
- * - `SignupForm.jsx` - User registration form component
- * 
- * #### Context API (`src/contexts/`)
- * State management using React Context:
- * - `UserContext.jsx` - Global user authentication and profile state management
- * 
- * #### Pages (`src/pages/`)
- * Full-page components representing different routes:
- * - `Home.jsx` - Landing/home page
- * - `LoginPage.jsx` - User login page
- * - `SignupPage.jsx` - User registration page
- * - `Dashboard.jsx` - Main user dashboard
- * - `ExaminePage.jsx` - Examination/assessment page
- * - `UploadPage.jsx` - Image/file upload interface
- * - `AnalysisPage.jsx` - Analysis results and findings display
- * - `HistoryPage.jsx` - User examination history and records
- * - `ProfiePage.jsx` - User profile and settings page
- * 
- * #### Protected Routes (`src/protectedWrapper/`)
- * Components for route protection and authentication:
- * - `UserProtectedWrapper.jsx` - Wrapper for authenticated user-only routes
- * - `AuthRedirectProtectedWrapper.jsx` - Wrapper to redirect unauthenticated users
- * 
- * #### Utilities (`src/utils/`)
- * Helper functions and utility modules for common tasks
- * 
- * #### Assets (`src/assets/`)
- * Static assets (images, icons, fonts, etc.)
- * 
- * ## Technology Stack
- * - **Frontend Framework**: React 18+
- * - **Build Tool**: Vite
- * - **Styling**: Tailwind CSS
- * - **Linting**: ESLint
- * - **State Management**: React Context API
- * - **Routing**: React Router (inferred from page structure)
- * 
- * ## Key Features
- * - User authentication (Login/Signup)
- * - User profile and dashboard
- * - Vision-based examination interface
- * - Image upload and processing
- * - Analysis results display
- * - Examination history tracking
- * - Responsive design with Tailwind CSS
- * - Protected routes for authenticated users
- * 
- * ## Getting Started
- * - Install dependencies: `npm install`
- * - Set up environment variables in `.env`
- * - Run development server: `npm run dev`
- * - Build for production: `npm run build`
- * @author Krishn Kant Kumar
+
+```
+src/
+├── assets/          # Static assets (images, logos)
+├── components/      # Reusable UI components
+│   ├── Navbar.jsx   # Top navigation
+│   ├── Sidebar.jsx  # Dashboard navigation
+│   └── ...
+├── contexts/        # React Context (UserContext, AxiosContext)
+├── pages/           # Full-page views
+│   ├── Home.jsx     # Landing page
+│   ├── Dashboard.jsx # User dashboard
+│   ├── ExaminePage.jsx # Analysis interface
+│   └── ...
+├── protectedWrapper/ # HOCs for route security
+└── utils/           # Helper functions
+```
+
+## Setup & Installation
+
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd frontend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+
+4.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+
+## Environment Variables
+
+Ensure you have a `.env` file in the `frontend` directory (though most config is currently hardcoded or relative, best practice suggests using VITE_ prefixed variables for API endpoints):
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+*(Note: Current implementation may use proxy or direct URLs, check `AxiosContext.jsx`)*
+
+## Contributing
+
+1.  Fork the repo
+2.  Create a feature branch
+3.  Commit your changes
+4.  Push to the branch
+5.  Create a Pull Request
+
+---
+**Built for AyurVision**

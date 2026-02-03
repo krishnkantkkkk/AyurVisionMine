@@ -1,7 +1,7 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {userRegister, userLogout, userLogin, userProfile, userUpdate} = require('../controllers/userController');
-const {isLoggedIn} = require('../middlewares/isLoggedIn');
+import {userRegister, userLogout, userLogin, userProfile, userUpdate} from '../controllers/userController.js';
+import isLoggedIn from '../middlewares/isLoggedIn.js';
 
 router.get('/', (req, res)=>{
     res.send("Hey User");
@@ -13,4 +13,4 @@ router.get('/logout', userLogout);
 router.get('/profile', isLoggedIn, userProfile);
 router.post('/update', isLoggedIn, userUpdate);
 
-module.exports = router;
+export default router
