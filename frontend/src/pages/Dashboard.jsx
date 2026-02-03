@@ -11,7 +11,7 @@ const Dashboard = () => {
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8">
                     <div>
                         <h1 className="text-3xl md:text-4xl font-bold text-brand-text mb-2">
-                            Welcome back, <span className=" text-black">{user.firstName.toUpperCase()}</span>
+                            Welcome back, <span className=" text-black">{user?.firstName?.toUpperCase()}</span>
                         </h1>
                         <p className="text-sm md:text-base text-brand-dark">Track your health journey with AyurVision</p>
                     </div>
@@ -31,7 +31,7 @@ const Dashboard = () => {
                     <div className="flex items-center justify-between mb-3">
                         <h3 className="text-sm font-semibold text-brand-darker">Total Analyses</h3>
                     </div>
-                    <p className="text-3xl font-bold text-brand-text">{diseasesList.length||0}</p>
+                    <p className="text-3xl font-bold text-brand-text">{diseasesList?.length||0}</p>
                     <p className="text-xs text-brand-dark mt-2">All time records</p>
                 </div>
 
