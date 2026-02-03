@@ -35,7 +35,7 @@ const UserProtectedWrapper = ({ children }) => {
                     .catch(err => {
                     })
             }).catch(err => {
-                if (err.status === 500 || err.code === "ERR_NETWORK") {
+                if (err?.status === 500 || err?.code === "ERR_NETWORK") {
                     navigate('/')
                 }
                 else {
