@@ -22,7 +22,7 @@ const LoginForm = ()=>{
             navigate('/user');
         })
         .catch(err =>{
-            if(err.response.status === 401){
+            if(err?.response?.status === 401){
                 setErrorMessage(err.response.data.message);
             }
         })
