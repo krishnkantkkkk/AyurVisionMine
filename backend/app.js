@@ -20,7 +20,9 @@ app.use(cors({
     origin : process.env.FRONTEND_ORIGIN, 
     credentials: true
 }));
-
+app.get('/', (req, res)=>{
+    res.json({message : "This is the AyurvisionAi Backend."})
+})
 app.use('/users', userRouter);
 app.use('/diseases', isLoggedIn, diseaseRouter);
 
