@@ -22,7 +22,6 @@ const UserProtectedWrapper = ({ children }) => {
             if (response.status === 200) {
                 setUser(response.data);
                 setIsAuthenticated(true);
-                console.log("Authenticated!")
             }
         }).catch(err => {
             if (err?.status === 500 || err?.code === "ERR_NETWORK") {
@@ -44,7 +43,6 @@ const UserProtectedWrapper = ({ children }) => {
         })
         .then(response => {
             setDiseasesList(response.data.diseasesList);
-            console.log("Disease")
         })
         .catch(err => {
         })
