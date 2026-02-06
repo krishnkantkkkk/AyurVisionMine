@@ -24,7 +24,7 @@ const SignupForm = ()=>{
             navigate('/user');
         })
         .catch(err =>{
-            setErrorMessage(err.response.data.message);
+            setErrorMessage(err?.response?.data.message);
         })
         .finally(()=>{
             setIsLoading(false);
