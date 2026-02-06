@@ -3,13 +3,15 @@ import { Upload, ArrowRight } from "lucide-react"
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { AxiosDataContext } from "../contexts/AxiosContext";
+import { UserDataContext } from "../contexts/UserContext";
+import callLogout from "../utils/callLogout";
 const UploadPage = () => {
     const fileInputRef = useRef(null);
     const [imageUrl, setImageUrl] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const api = useContext(AxiosDataContext);
-
+    const {setDiseasesList} = useContext(UserDataContext)
     const navigate = useNavigate();
 
     const upload = (e) => {
@@ -30,10 +32,11 @@ const UploadPage = () => {
         })
         .then(response => {
             setIsLoading(false);
+            setDiseasesList(prevDiseases=>[...prevDiseases, response.data.disease])
             navigate(`/user/examine/${response.data.disease._id}`)
         }).catch(err => {
             setIsLoading(false);
-            // err ignored
+            if(err?.response?.status === 401) callLogout(api, navigate);
         })
     }
 
