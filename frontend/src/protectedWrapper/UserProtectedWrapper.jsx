@@ -18,33 +18,37 @@ const UserProtectedWrapper = ({ children }) => {
                 Authorization : `Bearer ${localStorage.getItem('token')}`
             }
         })
-            .then(response => {
-                if (response.status === 200) {
-                    setUser(response.data);
-                    setIsAuthenticated(true);
-                }
-                api.get('/diseases/fetchOnePatientAllDiseases', {
-                    headers:{
-                        Authorization : `Bearer ${localStorage.getItem('token')}`
-                    }
-                })
-                    .then(response => {
-                        setDiseasesList(response.data.diseasesList)
-                    })
-                    .catch(err => {
-                    })
-            }).catch(err => {
-                if (err?.status === 500 || err?.code === "ERR_NETWORK") {
-                    navigate('/');
-                }
-                else {
-                    callLogout(api, navigate);
-                    navigate('/login', { replace: true });
-                }
-            }).finally(() => {
-                setIsLoading(false);
-            })
-    }, [navigate, setUser, setDiseasesList])
+        .then(response => {
+            if (response.status === 200) {
+                setUser(response.data);
+                setIsAuthenticated(true);
+                console.log("Authenticated!")
+            }
+        }).catch(err => {
+            if (err?.status === 500 || err?.code === "ERR_NETWORK") {
+                navigate('/');
+            }
+            else {
+                callLogout(api, navigate);
+                navigate('/login', { replace: true });
+            }
+        }).finally(() => {
+            setIsLoading(false);
+        })
+    }, [navigate, setUser, setDiseasesList, setIsAuthenticated])
+    useEffect(()=>{
+        api.get('/diseases/fetchOnePatientAllDiseases', {
+            headers:{
+                Authorization : `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        .then(response => {
+            setDiseasesList(response.data.diseasesList);
+            console.log("Disease")
+        })
+        .catch(err => {
+        })
+    }, [])
     if (isLoading) return <Loading />
     if (!isAuthenticated) return null;
     return (
