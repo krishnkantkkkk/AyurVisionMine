@@ -14,7 +14,7 @@ const Navbar = () => {
            <div className="w-7 h-7 bg-brand-dark rounded-full flex items-center justify-center text-white">
              <User size={14} fill="white" />
            </div>
-           <span className="text-xs font-semibold text-brand-darker">{localStorage.getItem('isLoggedIn') ? "Dashboard" : "Enter"}</span>
+           <span className="text-xs font-semibold text-brand-darker">{localStorage.getItem('token') ? "Dashboard" : "Enter"}</span>
         </Link>
       </div>
     </nav>

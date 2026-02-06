@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { replace, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AuthRedirectProtectedWrapper = ({children}) => {
     const navigate = useNavigate();
-    const token = localStorage.getItem('isLoggedIn');
+    const token = localStorage.getItem('token');
     useEffect(()=>{
       if(token) navigate('/user', {replace : true});
     })

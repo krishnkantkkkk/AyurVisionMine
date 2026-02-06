@@ -22,7 +22,7 @@ const Hero = () => {
           Machine-learning–based Ayurveda solutions combining ancient wisdom with modern intelligence.
         </p>
         <div>
-          {localStorage.getItem('isLoggedIn') ? "" : <Link to="/login"><GetStartedButton/></Link>}
+          {localStorage.getItem('token') ? "" : <Link to="/login"><GetStartedButton/></Link>}
         </div>
 
       </div>

@@ -22,7 +22,6 @@ const UserProtectedWrapper = ({ children }) => {
                 if (response.status === 200) {
                     setUser(response.data);
                     setIsAuthenticated(true);
-                    localStorage.setItem('isLoggedIn', true)
                 }
                 api.get('/diseases/fetchOnePatientAllDiseases', {
                     headers:{
@@ -36,7 +35,7 @@ const UserProtectedWrapper = ({ children }) => {
                     })
             }).catch(err => {
                 if (err?.status === 500 || err?.code === "ERR_NETWORK") {
-                    navigate('/')
+                    navigate('/');
                 }
                 else {
                     callLogout(api, navigate);
