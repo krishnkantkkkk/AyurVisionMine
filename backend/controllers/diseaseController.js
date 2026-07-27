@@ -6,17 +6,21 @@ import getLlmResponse from '../utils/getLlmResponse.js';
 export const createDisease = async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ message: "Image is required" });
-        console.log("Analyzing...")
+        console.log("Uploading to Cloudinary...")
         const base64Image = req.file.buffer.toString('base64');
-        const dataUri = `data:${req.file.mimetype};base64,${base64Image}`
-        console.log("Uploading...")
+        const dataUri = `data:${req.file.mimetype};base64,${base64Image}`;
+        
         const cloudinary_response = await cloudinary.uploader.upload(dataUri, { folder: "diseaseImage" });
         const image_url = cloudinary_response.url;
-        console.log("Upload Done!!!", image_url[0]);
+        console.log("Cloudinary Upload Done!");
+
+        console.log("Analyzing image with ML Model...");
         const report = await analyzeImage(image_url);
+
         console.log("Getting LLM Report...");
         const response = await getLlmResponse(report.response.prediction);
-        console.log("Report Collected!!! ", response != {});
+        console.log("Report Collected!");
+        
         const disease = await diseaseModel.create({
             name: report.response.prediction,
             home_remedies: response.home_remedies,
@@ -36,19 +40,21 @@ export const createDisease = async (req, res) => {
 export const fetchOneDisease = async (req, res) => {
     try {
         const { id } = req.params;
-        const disease = await diseaseModel.findOne({ _id: id, patient: req.user._id });
+        const disease = await diseaseModel.findOne({ _id: id, patient: req.user._id }).lean();
         if (disease) return res.status(200).json({ disease });
         return res.status(404).json({ message: "Not Found" });
     } catch (err) {
         console.log(err.message);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
 export const fetchOnePatientAllDiseases = async (req, res) => {
     try {
-        const diseasesList = await diseaseModel.find({ patient: req.user._id });
+        const diseasesList = await diseaseModel.find({ patient: req.user._id }).lean();
         return res.status(200).json({ diseasesList });
     } catch (err) {
         console.log(err.message);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }

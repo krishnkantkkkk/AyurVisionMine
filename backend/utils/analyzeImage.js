@@ -1,5 +1,6 @@
 import env from '../config/env.js'
-const analyzeImage = async (image_url) =>{
+
+const analyzeImage = async (image_url) => {
     const ml_raw_response = await fetch(`${env.ML_API_URL}/predict`, {
         method: "POST",
         headers: {

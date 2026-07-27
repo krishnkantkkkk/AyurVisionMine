@@ -8,48 +8,46 @@ import callLogout from "../utils/callLogout";
 const UserProtectedWrapper = ({ children }) => {
     const navigate = useNavigate();
     const api = useContext(AxiosDataContext);
-    const {isAuthenticated, setIsAuthenticated} = useContext(UserDataContext)
+    const { isAuthenticated, setIsAuthenticated, setUser, setDiseasesList } = useContext(UserDataContext);
     const [isLoading, setIsLoading] = useState(!isAuthenticated);
-    const { setUser } = useContext(UserDataContext);
-    const { setDiseasesList } = useContext(UserDataContext);
+
     useEffect(() => {
-        if(!isAuthenticated){
-            api.get('/users/profile', {
-                headers:{
-                    Authorization : `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+        if (!isAuthenticated) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                navigate('/login', { replace: true });
+                return;
+            }
+            api.get('/users/profile')
             .then(response => {
                 if (response.status === 200) {
                     setUser(response.data);
                     setIsAuthenticated(true);
-                    console.log("Authenticate")
                 }
             }).catch(err => {
                 if (err?.status === 500 || err?.code === "ERR_NETWORK") {
                     navigate('/');
-                }
-                else {
+                } else {
                     callLogout(api, navigate);
-                    navigate('/login', { replace: true });
                 }
             }).finally(() => {
                 setIsLoading(false);
-            })
+            });
         }
-    }, [navigate, setUser, setDiseasesList, setIsAuthenticated])
-    useEffect(()=>{
-        api.get('/diseases/fetchOnePatientAllDiseases', {
-            headers:{
-                Authorization : `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        .then(response => {
-            setDiseasesList(response.data.diseasesList.reverse());
-        })
-        .catch(err => {
-        })
-    }, [])
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            api.get('/diseases/fetchOnePatientAllDiseases')
+            .then(response => {
+                if (Array.isArray(response.data?.diseasesList)) {
+                    setDiseasesList(response.data.diseasesList.reverse());
+                }
+            })
+            .catch(() => {});
+        }
+    }, [isAuthenticated]);
+
     if (isLoading) return <Loading />
     if (!isAuthenticated) return null;
     return (
@@ -59,4 +57,4 @@ const UserProtectedWrapper = ({ children }) => {
     )
 }
 
-export default UserProtectedWrapper
+export default UserProtectedWrapper;

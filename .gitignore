@@ -1,9 +1,12 @@
+dist
+node_modules
+myenv
+
+Dockerfile
 .vscode
 .env
-node_modules
-Dockerfile
 .dockerignore
-myenv
-__pycache__
 .venv
-myenv
+.gitignore
+
+__pycache__

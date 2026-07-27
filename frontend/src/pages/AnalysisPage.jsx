@@ -1,30 +1,42 @@
 import { useContext, useEffect, useState } from 'react'
 import { AxiosDataContext } from '../contexts/AxiosContext';
+import { UserDataContext } from '../contexts/UserContext';
 import Loading from '../components/Loading'
 
 const AnalysisPage = ({ id }) => {
-    const [disease, setDisease] = useState({});
+    const [disease, setDisease] = useState(null);
     const api = useContext(AxiosDataContext);
+    const { diseasesList } = useContext(UserDataContext);
     const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        api.get(`/diseases/fetchOne/${id}`, {
-            headers:{
-                Authorization : `Bearer ${localStorage.getItem('token')}`
+        if (Array.isArray(diseasesList) && diseasesList.length > 0) {
+            const cached = diseasesList.find(d => String(d._id) === String(id));
+            if (cached) {
+                setDisease(cached);
+                setIsLoading(false);
+                return;
             }
-        }).then(response => {
+        }
+
+        api.get(`/diseases/fetchOne/${id}`)
+        .then(response => {
             setDisease(response.data.disease);
         }).catch(err => {
-            // err ignored
+            console.error(err);
         }).finally(() => {
             setIsLoading(false);
-        })
-    }, [])
+        });
+    }, [id, diseasesList, api]);
+
     if (isLoading) return <Loading />
+    if (!disease) return <div className="h-full w-full flex justify-center items-center">Analysis Not Found</div>
+
     return (
         <div className='h-full w-full flex flex-col items-center md:items-start md:flex-row tracking-tight'>
             <div className="w-1/4 min-w-70 max-w-full h-fit md:h-full justify-center rounded-3xl flex flex-col mb-10 md:mb-0">
                 <div className="w-full p-3 shadow-xs rounded-3xl shadow-brand-beige">
-                    <img className='h-60 md:h-80 w-full object-cover rounded-3xl' src={disease.image} alt="" />
+                    <img className='h-60 md:h-80 w-full object-cover rounded-3xl' src={disease.image} alt={disease.name || "Disease"} />
                     <div className="w-full text-center md:text-2xl p-2">{disease.name}</div>
                 </div>
             </div>
@@ -34,14 +46,11 @@ const AnalysisPage = ({ id }) => {
                     <div className="text-3xl font-bold uppercase text-brand-accentDark mb-5">Causes</div>
                     <div className="flex gap-2 flex-wrap justify-center md:justify-start">
                         {
-                            disease.causes.length > 0
-                                ?
-                                disease.causes.map((cause, i) => {
-                                    return (
-                                        <div key={i} className='border border-brand-accent p-5 flex flex-col items-center justify-center w-3/10 min-w-55 rounded-md'>{cause}</div>
-                                    )
-                                })
-                                : ""
+                            disease.causes && disease.causes.length > 0
+                                ? disease.causes.map((cause, i) => (
+                                    <div key={i} className='border border-brand-accent p-5 flex flex-col items-center justify-center w-3/10 min-w-55 rounded-md'>{cause}</div>
+                                ))
+                                : <div className="text-gray-500">No causes listed</div>
                         }
                     </div>
                 </div>
@@ -49,18 +58,14 @@ const AnalysisPage = ({ id }) => {
                     <div className="text-3xl font-bold uppercase text-brand-accentDark mb-5">Home Remedies</div>
                     <div className="flex gap-2 flex-wrap justify-center md:justify-start">
                         {
-                            disease.home_remedies.length > 0
-                                ?
-                                disease.home_remedies.map((remedy, i) => {
-                                    return (
-                                        <div key={i} className='border border-brand-accent p-5 flex flex-col items-center justify-center w-3/10 min-w-55 rounded-md'>
-                                            <div className="text-xl font-medium">{remedy.remedy}</div>
-                                            <div className="">{remedy.process}</div>
-                                        </div>
-                                    )
-                                })
-                                :
-                                ""
+                            disease.home_remedies && disease.home_remedies.length > 0
+                                ? disease.home_remedies.map((remedy, i) => (
+                                    <div key={i} className='border border-brand-accent p-5 flex flex-col items-center justify-center w-3/10 min-w-55 rounded-md'>
+                                        <div className="text-xl font-medium">{remedy.remedy}</div>
+                                        <div className="">{remedy.process}</div>
+                                    </div>
+                                ))
+                                : <div className="text-gray-500">No home remedies listed</div>
                         }
                     </div>
                 </div>
@@ -68,15 +73,11 @@ const AnalysisPage = ({ id }) => {
                     <div className="text-3xl font-bold uppercase text-brand-accentDark mb-5">Suggestions</div>
                     <div className="flex gap-2 flex-wrap justify-center md:justify-start">
                         {
-                            disease.suggestions.length > 0
-                                ?
-                                disease.suggestions.map((suggestion, i) => {
-                                    return (
-                                        <div key={i} className='border border-brand-accent p-5 flex flex-col items-center justify-center w-3/10 min-w-55 rounded-md'>{suggestion}</div>
-                                    )
-                                })
-                                :
-                                ""
+                            disease.suggestions && disease.suggestions.length > 0
+                                ? disease.suggestions.map((suggestion, i) => (
+                                    <div key={i} className='border border-brand-accent p-5 flex flex-col items-center justify-center w-3/10 min-w-55 rounded-md'>{suggestion}</div>
+                                ))
+                                : <div className="text-gray-500">No suggestions listed</div>
                         }
                     </div>
                 </div>

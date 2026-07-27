@@ -18,11 +18,12 @@ const diseaseSchema = mongoose.Schema({
     },
     date : {
         type : Date,
-        default : Date.now()
+        default : Date.now
     },
     patient : {
         type : mongoose.Schema.Types.ObjectId,
-        required : true
+        required : true,
+        index : true
     }
 })
 

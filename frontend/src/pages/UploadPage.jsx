@@ -21,22 +21,19 @@ const UploadPage = () => {
     }
 
     const handleSubmit = (e) => {
-        setIsLoading(true);
         e.preventDefault();
+        if (!imageFile) return;
+        setIsLoading(true);
         const formData = new FormData();
         formData.append("image", imageFile);
-        api.post(`/diseases/create`, formData, {
-            headers:{
-                Authorization : `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        api.post(`/diseases/create`, formData)
         .then(response => {
             setIsLoading(false);
-            setDiseasesList(prevDiseases=>[...prevDiseases, response.data.disease])
+            setDiseasesList(prevDiseases => Array.isArray(prevDiseases) ? [...prevDiseases, response.data.disease] : [response.data.disease]);
             navigate(`/user/examine/${response.data.disease._id}`)
         }).catch(err => {
             setIsLoading(false);
-            if(err?.response?.status === 401) callLogout(api, navigate);
+            if (err?.response?.status === 401) callLogout(api, navigate);
         })
     }
 

@@ -27,23 +27,14 @@ const Dashboard = () => {
                     <p className="text-3xl font-bold text-brand-text">{diseasesList?.length||0}</p>
                     <p className="text-xs text-brand-dark mt-2">All time records</p>
                 </div>
-
-                <div className="flex flex-col justify-center items-center border border-gray-200 h-50 w-50 md:h-60 md:w-60 p-6 rounded-2xl transition-shadow relative overflow-hidden">
-                    <div className="h-full w-1/10 bg-brand-accent absolute top-0 left-0"></div>
-                    <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-sm font-semibold text-brand-darker">Total Analyses</h3>
-                    </div>
-                    <p className="text-3xl font-bold text-brand-text">{diseasesList?.length||0}</p>
-                    <p className="text-xs text-brand-dark mt-2">All time records</p>
-                </div>
                 
                 <div className="flex flex-col justify-center items-center border border-gray-200 h-50 w-50 md:h-60 md:w-60 p-6 rounded-2xl transition-shadow relative overflow-hidden">
                     <div className="h-full w-1/10 bg-brand-accent absolute top-0 left-0"></div>
                     <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-sm font-semibold text-brand-darker">Status</h3>
+                        <h3 className="text-sm font-semibold text-brand-darker">Account Status</h3>
                     </div>
                     <p className="text-3xl font-bold text-brand-text">Active</p>
-                    <p className="text-xs text-brand-dark mt-2">All time records</p>
+                    <p className="text-xs text-brand-dark mt-2">Verified profile</p>
                 </div>
             </div>
 
