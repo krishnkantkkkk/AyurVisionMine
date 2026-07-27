@@ -8,33 +8,13 @@ import callLogout from "../utils/callLogout";
 const UserProtectedWrapper = ({ children }) => {
     const navigate = useNavigate();
     const api = useContext(AxiosDataContext);
-    const { isAuthenticated, setIsAuthenticated, setUser, setDiseasesList } = useContext(UserDataContext);
-    const [isLoading, setIsLoading] = useState(!isAuthenticated);
+    const { isAuthenticated, setIsAuthenticated, setUser, setDiseasesList, authLoading } = useContext(UserDataContext);
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                navigate('/login', { replace: true });
-                return;
-            }
-            api.get('/users/profile')
-            .then(response => {
-                if (response.status === 200) {
-                    setUser(response.data);
-                    setIsAuthenticated(true);
-                }
-            }).catch(err => {
-                if (err?.status === 500 || err?.code === "ERR_NETWORK") {
-                    navigate('/');
-                } else {
-                    callLogout(api, navigate);
-                }
-            }).finally(() => {
-                setIsLoading(false);
-            });
+        if (!authLoading && !isAuthenticated) {
+            callLogout(api, navigate, { setIsAuthenticated, setUser, setDiseasesList });
         }
-    }, [isAuthenticated]);
+    }, [authLoading, isAuthenticated, api, navigate, setIsAuthenticated, setUser, setDiseasesList]);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -48,7 +28,7 @@ const UserProtectedWrapper = ({ children }) => {
         }
     }, [isAuthenticated]);
 
-    if (isLoading) return <Loading />
+    if (authLoading) return <Loading />
     if (!isAuthenticated) return null;
     return (
         <>

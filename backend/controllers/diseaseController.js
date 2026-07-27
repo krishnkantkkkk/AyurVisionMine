@@ -2,6 +2,7 @@ import cloudinary from '../config/cloudinary.js';
 import diseaseModel from '../models/diseaseModel.js';
 import analyzeImage from '../utils/analyzeImage.js';
 import getLlmResponse from '../utils/getLlmResponse.js';
+import mongoose from 'mongoose';
 
 export const createDisease = async (req, res) => {
     try {
@@ -36,10 +37,12 @@ export const createDisease = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
 export const fetchOneDisease = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(404).json({ message: "Not Found" });
+        }
         const disease = await diseaseModel.findOne({ _id: id, patient: req.user._id }).lean();
         if (disease) return res.status(200).json({ disease });
         return res.status(404).json({ message: "Not Found" });

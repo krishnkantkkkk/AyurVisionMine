@@ -11,7 +11,8 @@ const UploadPage = () => {
     const [imageFile, setImageFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const api = useContext(AxiosDataContext);
-    const {setDiseasesList} = useContext(UserDataContext)
+    const userContext = useContext(UserDataContext);
+    const { setDiseasesList } = userContext;
     const navigate = useNavigate();
 
     const upload = (e) => {
@@ -33,7 +34,7 @@ const UploadPage = () => {
             navigate(`/user/examine/${response.data.disease._id}`)
         }).catch(err => {
             setIsLoading(false);
-            if (err?.response?.status === 401) callLogout(api, navigate);
+            if (err?.response?.status === 401) callLogout(api, navigate, userContext);
         })
     }
 

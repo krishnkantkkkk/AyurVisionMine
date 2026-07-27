@@ -2,9 +2,11 @@ import { UserRound, LogOut, LayoutDashboard, ScanText, History, BadgeQuestionMar
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AxiosDataContext } from "../contexts/AxiosContext";
+import { UserDataContext } from "../contexts/UserContext";
 import callLogout from "../utils/callLogout";
 const Sidebar = ()=>{
     const api = useContext(AxiosDataContext);
+    const userContext = useContext(UserDataContext);
     const navigate = useNavigate();
     return(
         <div className="absolute left-0 top-0 w-17.5 bg-brand-accent h-full flex flex-col justify-between items-center py-10 md:w-25">
@@ -17,7 +19,7 @@ const Sidebar = ()=>{
                 <Link to="/user/history" className="p-3 hover:text-black"><History /></Link>
             </div>
             <div className="flex flex-col gap-2">
-                <div className="p-3 hover:text-black cursor-pointer" onClick={()=>{callLogout(api, navigate)}}><LogOut/></div>
+                <div className="p-3 hover:text-black cursor-pointer" onClick={()=>{callLogout(api, navigate, userContext)}}><LogOut/></div>
             </div>
         </div>
     )

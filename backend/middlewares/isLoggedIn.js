@@ -4,19 +4,36 @@ import env from '../config/env.js'
 
 const isLoggedIn = async (req, res, next) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1];
-        if (!token || token === 'null' || token === 'undefined') return res.status(401).json({ message: "Unauthorized" });
-        const data = jwt.verify(token, env.JWT_KEY);
+        let token = req.cookies?.accessToken || req.cookies?.token;
+        if (!token && req.headers.authorization) {
+            const authHeader = req.headers.authorization.trim();
+            if (authHeader.startsWith('Bearer ')) {
+                token = authHeader.split(' ')[1];
+            } else {
+                token = authHeader;
+            }
+        }
+
+        if (!token || token === 'null' || token === 'undefined') {
+            return res.status(401).json({ message: "Unauthorized", code: "TOKEN_EXPIRED" });
+        }
+
+        let data;
+        try {
+            data = jwt.verify(token, env.JWT_ACCESS_SECRET);
+        } catch {
+            data = jwt.verify(token, env.JWT_KEY);
+        }
+
         const user = await userModel.findOne({ _id: data.userid }).lean();
         if (!user) {
-            res.clearCookie('token');
-            return res.status(401).json({ message: "Unauthorized" });
+            return res.status(401).json({ message: "Unauthorized", code: "USER_NOT_FOUND" });
         }
         req.user = user;
         next();
     } catch (err) {
-        console.log(err);
-        return res.status(401).json({ message: "Unauthorized" });
+        console.log("Auth Error:", err.message);
+        return res.status(401).json({ message: "Unauthorized", code: "TOKEN_EXPIRED" });
     }
 }
 

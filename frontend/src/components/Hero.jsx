@@ -1,8 +1,12 @@
 import GetStartedButton from './GetStartedButton';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserDataContext } from '../contexts/UserContext';
 import stoneBlender from '/stoneBlender.png'
 
 const Hero = () => {
+  const { isAuthenticated } = useContext(UserDataContext);
+
   return (
     <main className="w-full h-full flex flex-col md:flex-row md:mt-0">
       <div className="z-10 w-full md:w-1/2 pt-10 md:pt-20 pl-8 md:pl-16 flex flex-col justify-center min-h-125 md:min-h-150">
@@ -22,7 +26,7 @@ const Hero = () => {
           Machine-learning–based Ayurveda solutions combining ancient wisdom with modern intelligence.
         </p>
         <div>
-          {localStorage.getItem('token') ? "" : <Link to="/login"><GetStartedButton/></Link>}
+          {isAuthenticated ? "" : <Link to="/login"><GetStartedButton/></Link>}
         </div>
 
       </div>

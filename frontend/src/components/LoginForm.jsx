@@ -7,23 +7,25 @@ const LoginForm = ()=>{
 
     const [formData, setFormData] = useState({email : '', password : ''});
     const navigate = useNavigate();
-    const {user, setUser} = useContext(UserDataContext);
+    const { user, setUser, setIsAuthenticated } = useContext(UserDataContext);
     const api = useContext(AxiosDataContext);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("")
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        setFormData({email : '', password : ''});
+        setErrorMessage("");
         setIsLoading(true);
         api.post('/users/login', formData)
         .then(response => {
             setUser(response.data.user);
-            localStorage.setItem('token', response.data.token)
+            setIsAuthenticated(true);
             navigate('/user');
         })
         .catch(err =>{
-            if(err?.response?.status === 401){
+            if(err?.response?.data?.message){
                 setErrorMessage(err.response.data.message);
+            } else {
+                setErrorMessage("Login failed. Please try again.");
             }
         })
         .finally(() =>{
@@ -60,7 +62,7 @@ const LoginForm = ()=>{
                             setFormData(copyData);
                         }} className="outline-none w-[100%] py-2" type="password" placeholder="*****" value={formData.password} required/>
                     </div>
-                    <button className="w-full bg-brand-accent text-white p-3 rounded-xl rounded-tr-none">Login</button>
+                    <button className="w-full bg-brand-accent text-white p-3 rounded-xl rounded-tr-none hover:bg-brand-accentDark cursor-pointer">Login</button>
                 </div>
                 <div className="md:opacity-0">
                     Don't have any account? <Link to='/signup' className="text-brand-dark">Sign Up</Link>

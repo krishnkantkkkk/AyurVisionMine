@@ -10,21 +10,21 @@ const SignupForm = ()=>{
     const [formData, setFormData] = useState({firstName : '', lastName : '', email : '', password : ''});
     const [errorMessage, setErrorMessage] = useState("");
     const api = useContext(AxiosDataContext);
-    const {setUser} = useContext(UserDataContext);
+    const { setUser, setIsAuthenticated } = useContext(UserDataContext);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e)=>{
         setIsLoading(true);
         e.preventDefault();
-        setFormData({firstName : '', lastName : '', email : '', password : ''});
-        api.post('users/register', formData)
+        setErrorMessage("");
+        api.post('/users/register', formData)
         .then(response =>{
             setUser(response.data.user);
-            localStorage.setItem('token', response.data.token);
+            setIsAuthenticated(true);
             navigate('/user');
         })
         .catch(err =>{
-            setErrorMessage(err?.response?.data.message);
+            setErrorMessage(err?.response?.data?.message || "Registration failed. Please try again.");
         })
         .finally(()=>{
             setIsLoading(false);
@@ -76,7 +76,7 @@ const SignupForm = ()=>{
                             setFormData(copyData);
                         }} className="outline-none w-[100%] py-2" type="password" placeholder="*****" required/>
                     </div>
-                    <button className="w-full bg-brand-accent text-white p-3 rounded-xl rounded-tr-none">Sign Up</button>
+                    <button className="w-full bg-brand-accent text-white p-3 rounded-xl rounded-tr-none cursor-pointer hover:bg-brand-accentDark">Sign Up</button>
                 </div>
                 <div className="md:opacity-0">
                     Already have an account? <Link to='/login' className="text-brand-dark">Sign In</Link>

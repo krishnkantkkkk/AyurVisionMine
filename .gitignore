@@ -1,0 +1,11 @@
+dist
+node_modules
+myenv
+
+Dockerfile
+.vscode
+.env
+.dockerignore
+.venv
+
+__pycache__

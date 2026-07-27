@@ -21,6 +21,10 @@ const userSchema = mongoose.Schema({
     age : {
         type : Number,
         default : 20
+    },
+    refreshToken: {
+        type: String,
+        select: false
     }
 })
 
