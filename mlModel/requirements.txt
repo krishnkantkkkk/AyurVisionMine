@@ -1,3 +1,7 @@
-tensorflow-cpu
 fastapi
-fastapi[standard]
+uvicorn[standard]
+tensorflow-cpu
+pillow
+requests
+numpy
+pydantic

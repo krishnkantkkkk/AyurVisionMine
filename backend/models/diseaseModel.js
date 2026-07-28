@@ -16,6 +16,12 @@ const diseaseSchema = mongoose.Schema({
     suggestions : {
         type : Array
     },
+    all_predictions : {
+        type : Array
+    },
+    suggestion_seriousness : {
+        type : mongoose.Schema.Types.Mixed
+    },
     date : {
         type : Date,
         default : Date.now

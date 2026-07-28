@@ -40,7 +40,7 @@ export const createDisease = async (req, res) => {
             const seriousness = "Healthy (No Disease Detected)";
             
             console.log("Getting LLM Report for Healthy Skin...");
-            const response = await getLlmResponse("healthy");
+            const response = await getLlmResponse("healthy", "healthy");
             console.log("Report Collected!");
 
             const disease = await diseaseModel.create({
@@ -48,6 +48,7 @@ export const createDisease = async (req, res) => {
                 home_remedies: response?.home_remedies || [],
                 suggestions: response?.suggestions || [],
                 causes: response?.causes || [],
+                all_predictions: [],
                 suggestion_seriousness: seriousness,
                 patient: req.user._id,
                 image: image_url
@@ -56,17 +57,26 @@ export const createDisease = async (req, res) => {
         } else {
             console.log("Skin classified as UNHEALTHY. Analyzing image with ML Model...");
             const report = await analyzeImage(image_url);
+            const diseaseName = "Unhealthy Skin";
 
-            console.log("Getting LLM Report...");
-            const response = await getLlmResponse(report.response.prediction);
+            const allPredictions = report?.response?.all_predictions || [
+                {
+                    category: report?.response?.prediction || "Skin Lesion",
+                    confidence: report?.response?.prediction_confidence || 100
+                }
+            ];
+
+            console.log("Getting LLM Report for Unhealthy Skin with all predictions:", allPredictions);
+            const response = await getLlmResponse(allPredictions, "unhealthy");
             console.log("Report Collected!");
             
             const disease = await diseaseModel.create({
-                name: report.response.prediction,
+                name: diseaseName,
                 home_remedies: response?.home_remedies || [],
                 suggestions: response?.suggestions || [],
                 causes: response?.causes || [],
-                suggestion_seriousness: report.response.prediction_confidence,
+                all_predictions: allPredictions,
+                suggestion_seriousness: report?.response?.prediction_confidence,
                 patient: req.user._id,
                 image: image_url
             });

@@ -44,11 +44,22 @@ def predict(response : Response, image : ImageRequest):
         if model is None :
             get_model()
         prediction = predict_skin_disease(model, image.image_url)
+        probs = prediction[0]
+        all_predictions = [
+            {
+                "category": classes[i],
+                "confidence": float(round(float(probs[i]) * 100, 2))
+            }
+            for i in range(len(classes))
+        ]
+        all_predictions.sort(key=lambda x: x["confidence"], reverse=True)
+
         response.status_code = 200
-        return{
-            "response":{
-                "prediction" : classes[np.argmax(prediction)],
-                "prediction_confidence" : int(np.max(prediction)*100)
+        return {
+            "response": {
+                "prediction": classes[np.argmax(prediction)],
+                "prediction_confidence": int(np.max(prediction) * 100),
+                "all_predictions": all_predictions
             }
         }
     except FileNotFoundError as e:
