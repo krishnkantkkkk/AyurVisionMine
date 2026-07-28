@@ -2,41 +2,83 @@ import cloudinary from '../config/cloudinary.js';
 import diseaseModel from '../models/diseaseModel.js';
 import analyzeImage from '../utils/analyzeImage.js';
 import getLlmResponse from '../utils/getLlmResponse.js';
+import classifySkinImage from '../utils/classifySkinImage.js';
 import mongoose from 'mongoose';
 
 export const createDisease = async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ message: "Image is required" });
-        console.log("Uploading to Cloudinary...")
+        console.log("Starting parallel Cloudinary upload & Gemini classification...");
+        
         const base64Image = req.file.buffer.toString('base64');
         const dataUri = `data:${req.file.mimetype};base64,${base64Image}`;
         
-        const cloudinary_response = await cloudinary.uploader.upload(dataUri, { folder: "diseaseImage" });
+        // Launch Cloudinary upload and Gemini Classification concurrently
+        const cloudinaryPromise = cloudinary.uploader.upload(dataUri, { folder: "diseaseImage" });
+        const classificationPromise = classifySkinImage(null, base64Image, req.file.mimetype);
+
+        // Wait for both Cloudinary upload and Gemini classification simultaneously
+        const [cloudinary_response, classification] = await Promise.all([
+            cloudinaryPromise,
+            classificationPromise
+        ]);
+
         const image_url = cloudinary_response.url;
-        console.log("Cloudinary Upload Done!");
+        console.log("Cloudinary Upload & Gemini Classification Completed!");
+        console.log("Classification result:", classification);
 
-        console.log("Analyzing image with ML Model...");
-        const report = await analyzeImage(image_url);
+        if (!classification.is_skin || classification.classification === 'NOT_SKIN') {
+            return res.status(400).json({
+                message: "Please upload a valid skin image. The provided image is not recognized as human skin.",
+                classification
+            });
+        }
 
-        console.log("Getting LLM Report...");
-        const response = await getLlmResponse(report.response.prediction);
-        console.log("Report Collected!");
-        
-        const disease = await diseaseModel.create({
-            name: report.response.prediction,
-            home_remedies: response.home_remedies,
-            suggestions: response.suggestions,
-            causes: response.causes,
-            suggestion_seriousness: report.response.prediction_confidence,
-            patient: req.user._id,
-            image: image_url
-        });
-        res.status(201).json({ disease });
+        if (classification.is_healthy || classification.classification === 'HEALTHY') {
+            console.log("Skin classified as HEALTHY. Bypassing ML Model...");
+            const diseaseName = "Healthy Skin";
+            const seriousness = "Healthy (No Disease Detected)";
+            
+            console.log("Getting LLM Report for Healthy Skin...");
+            const response = await getLlmResponse("healthy");
+            console.log("Report Collected!");
+
+            const disease = await diseaseModel.create({
+                name: diseaseName,
+                home_remedies: response?.home_remedies || [],
+                suggestions: response?.suggestions || [],
+                causes: response?.causes || [],
+                suggestion_seriousness: seriousness,
+                patient: req.user._id,
+                image: image_url
+            });
+            return res.status(201).json({ disease });
+        } else {
+            console.log("Skin classified as UNHEALTHY. Analyzing image with ML Model...");
+            const report = await analyzeImage(image_url);
+
+            console.log("Getting LLM Report...");
+            const response = await getLlmResponse(report.response.prediction);
+            console.log("Report Collected!");
+            
+            const disease = await diseaseModel.create({
+                name: report.response.prediction,
+                home_remedies: response?.home_remedies || [],
+                suggestions: response?.suggestions || [],
+                causes: response?.causes || [],
+                suggestion_seriousness: report.response.prediction_confidence,
+                patient: req.user._id,
+                image: image_url
+            });
+            return res.status(201).json({ disease });
+        }
     } catch (err) {
-        console.log(err.message);
-        res.status(500).json({ message: "Internal Server Error" });
+        console.error("createDisease error:", err);
+        const errorMsg = err?.message || (typeof err === 'string' ? err : "Internal Server Error");
+        res.status(500).json({ message: errorMsg });
     }
 }
+
 export const fetchOneDisease = async (req, res) => {
     try {
         const { id } = req.params;

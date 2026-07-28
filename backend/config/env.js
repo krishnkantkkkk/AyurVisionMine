@@ -9,6 +9,7 @@ const env = {
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   GROQ_API_KEY: process.env.GROQ_API_KEY,
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   DB_URI: process.env.DB_URI,
   JWT_KEY: (!process.env.JWT_KEY || process.env.JWT_KEY.startsWith('<')) ? 'ayurvision_jwt_secret_key_2026' : process.env.JWT_KEY,
   JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || process.env.JWT_KEY || 'ayurvision_access_secret_key_2026',
